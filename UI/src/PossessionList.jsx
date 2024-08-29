@@ -72,7 +72,7 @@ const PossessionList = () => {
               <th>Valeur</th>
               <th>Date Début</th>
               <th>Date Fin</th>
-              <th>Taux</th>
+              <th>Taux d'amortissement</th>
               <th>Valeur Actuelle</th>
               <th>Actions</th>
             </tr>
@@ -84,7 +84,7 @@ const PossessionList = () => {
                 <td>{possession.valeur}</td>
                 <td>{new Date(possession.dateDebut).toLocaleDateString()}</td>
                 <td>{possession.dateFin ? new Date(possession.dateFin).toLocaleDateString() : 'N/A'}</td>
-                <td>{possession.taux}</td>
+                <td>{possession.tauxAmortissement}</td>
                 <td>{/* Calcul de la valeur actuelle, si nécessaire */}</td>
                 <td>
                   <Button as={Link} to={`/possession/${possession.libelle}/update`} variant="warning">Éditer</Button>{' '}

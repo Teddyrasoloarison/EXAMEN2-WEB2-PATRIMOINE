@@ -4,7 +4,7 @@ const CreatePossessionPage = () => {
   const [libelle, setLibelle] = useState('');
   const [valeur, setValeur] = useState('');
   const [dateDebut, setDateDebut] = useState('');
-  const [taux, setTaux] = useState('');
+  const [tauxAmortissement, setTaux] = useState('');
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
@@ -24,7 +24,7 @@ const CreatePossessionPage = () => {
           libelle,
           valeur,
           dateDebut,
-          taux
+          tauxAmortissement,
         }),
       });
 
@@ -90,7 +90,7 @@ const CreatePossessionPage = () => {
           <input
             type="number"
             id="taux"
-            value={taux}
+            value={tauxAmortissement}
             onChange={(e) => setTaux(e.target.value)}
             required
           />
