@@ -1,7 +1,7 @@
-const { readFile, writeFile } = require('../data/index');
+import { readFile, writeFile } from '../data/index.js';
 
 // Ajouter une possession
-async function ajouterPossession(req, res) {
+export async function ajouterPossession(req, res) {
     try {
         const { libelle, valeur, dateDebut, tauxAmortissement } = req.body;
 
@@ -31,7 +31,7 @@ async function ajouterPossession(req, res) {
 }
 
 // Obtenir la liste des possessions
-async function getPossessions(req, res) {
+export async function getPossessions(req, res) {
     try {
         const { status, data } = await readFile('./data/possessions.json');
         if (status === 'ERROR') {
@@ -45,7 +45,7 @@ async function getPossessions(req, res) {
 }
 
 // Mettre à jour une possession par libelle
-async function updatePossession(req, res) {
+export async function updatePossession(req, res) {
     const { libelle } = req.params;
     const { valeur } = req.body;
 
@@ -80,7 +80,7 @@ async function updatePossession(req, res) {
 }
 
 // Clore une possession par libelle
-async function closePossession(req, res) {
+export async function closePossession(req, res) {
     const { libelle } = req.params;
     console.log('Received libelle:', libelle);
 
@@ -106,7 +106,7 @@ async function closePossession(req, res) {
     }
 }
 
-async function deletePossession(req, res) {
+export async function deletePossession(req, res) {
     const { libelle } = req.params;
 
     try {
@@ -133,11 +133,81 @@ async function deletePossession(req, res) {
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 }
+// controllers/patrimoineController.js
+import Flux from "../../models/possessions/Possession.js"
+export const getValeurPatrimoine = async (req, res) => {
+    const { date } = req.params;
+    const dateObjet = new Date(date);
 
-module.exports = {
-    ajouterPossession,
-    getPossessions,
-    updatePossession,
-    closePossession,
-    deletePossession
+    try {
+        const { status, data } = await readFile('./data/possessions.json');
+        if (status === 'ERROR') {
+            return res.status(500).json({ error: 'Erreur de lecture du fichier' });
+        }
+
+        let patrimoineTotal = 0;
+        data.forEach(possession => {
+            const instancePossession = new Flux(
+                possession.possesseur,
+                possession.libelle,
+                possession.valeur,
+                new Date(possession.dateDebut),
+                possession.dateFin ? new Date(possession.dateFin) : null,
+                possession.tauxAmortissement,
+                possession.jour // Si applicable
+            );
+            patrimoineTotal += instancePossession.getValeur(dateObjet);
+        });
+
+        res.status(200).json({ date: dateObjet, patrimoine: patrimoineTotal });
+    } catch (error) {
+        console.error('Erreur lors du calcul du patrimoine:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
 };
+// controllers/patrimoineController.js
+export const getValeurPatrimoineRange = async (req, res) => {
+    const { dateDebut, dateFin, jour, type } = req.body;
+    const debut = new Date(dateDebut);
+    const fin = new Date(dateFin);
+
+    try {
+        const { status, data } = await readFile('./data/possessions.json');
+        if (status === 'ERROR') {
+            return res.status(500).json({ error: 'Erreur de lecture du fichier' });
+        }
+
+        let results = [];
+        let currentDate = new Date(debut);
+
+        while (currentDate <= fin) {
+            let patrimoineTotal = 0;
+            data.forEach(possession => {
+                const instancePossession = new Flux(
+                    possession.possesseur,
+                    possession.libelle,
+                    possession.valeur,
+                    new Date(possession.dateDebut),
+                    possession.dateFin ? new Date(possession.dateFin) : null,
+                    possession.tauxAmortissement,
+                    jour // Si applicable
+                );
+                patrimoineTotal += instancePossession.getValeur(currentDate);
+            });
+
+            results.push({ date: new Date(currentDate), patrimoine: patrimoineTotal });
+
+            if (type === 'month') {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            } else {
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+        }
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Erreur lors du calcul du patrimoine:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+};
+

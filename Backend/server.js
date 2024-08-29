@@ -1,14 +1,15 @@
-const express = require('express');
+import express from 'express';
 const app = express();
 const PORT = 3001;
-const fs = require('fs/promises');
-
+import fs from 'fs/promises';
+import cors from 'cors';
+app.use(cors()); // Ajoutez cette ligne pour activer CORS
 const dataFilePath = './data/possessions.json';
 
 app.use(express.json());
 
-const bodyParser = require('body-parser');
-const possessionRoutes = require('./routes/possessions');
+import bodyParser from 'body-parser';
+import possessionRoutes from './routes/possessions.js';
 
 app.use(bodyParser.json());
 
@@ -16,7 +17,7 @@ app.use(bodyParser.json());
 app.use('/api/possession', possessionRoutes);
 
 // Fonction pour lire les données du fichier JSON
-async function readData() {
+export async function readData() {
     try {
         await fs.access(dataFilePath); // Vérifie si le fichier existe
     } catch (err) {
@@ -34,7 +35,7 @@ async function readData() {
 }
 
 // Fonction pour écrire les données dans le fichier JSON
-async function writeData(data) {
+export async function writeData(data) {
     try {
         await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2));
     } catch (err) {

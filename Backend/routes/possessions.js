@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { ajouterPossession, getPossessions, updatePossession, closePossession, deletePossession } = require('../controllers/possessionsController');
+import { ajouterPossession, getPossessions, updatePossession, closePossession, deletePossession, getValeurPatrimoine, getValeurPatrimoineRange } from '../controllers/possessionsController.js';
 
 // Route pour ajouter une possession
 router.post('/', ajouterPossession);
@@ -17,4 +17,10 @@ router.patch('/:libelle/close', closePossession);
 // Route pour supprimer une possession
 router.delete('/:libelle', deletePossession);
 
-module.exports = router;
+// Route pour obtenir la valeur du patrimoine à une date donnée
+router.get('/:date', getValeurPatrimoine);
+
+//
+router.post('/range', getValeurPatrimoineRange);
+
+export default router;
