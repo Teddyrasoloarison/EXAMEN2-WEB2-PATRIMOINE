@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 const UpdatePossessionPage = () => {
   const { libelle } = useParams();
   const navigate = useNavigate();
-  const [possessions, setPossessions] = useState([]);
   const [currentPossession, setCurrentPossession] = useState(null);
   const [valeur, setValeur] = useState('');
   const [dateFin, setDateFin] = useState('');
@@ -12,20 +11,22 @@ const UpdatePossessionPage = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
 
-  // Fetch the current possession details when the component mounts
   useEffect(() => {
     const fetchPossession = async () => {
       try {
+        console.log('Fetching possession for libelle:', libelle);
         const response = await fetch(`http://localhost:3001/api/possession/${libelle}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log('Fetched possession data:', data);
         setCurrentPossession(data);
         setValeur(data.valeur);
         setDateFin(data.dateFin || '');
       } catch (error) {
         setError(error.message);
+        console.error('Erreur lors de la récupération des données:', error);
       }
     };
     fetchPossession();
@@ -37,32 +38,40 @@ const UpdatePossessionPage = () => {
     setSuccessMessage(null);
 
     try {
+      console.log('Mise à jour avec les données :', {
+        valeur,
+        dateFin
+      });
+
       const response = await fetch(`http://localhost:3001/api/possession/${libelle}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          libelle,
           valeur,
           dateFin
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        throw new Error(`Network response was not ok: ${errorData.message || 'Unknown error'}`);
       }
 
       const data = await response.json();
+      console.log('Update response:', data);
       setSuccessMessage('Possession mise à jour avec succès!');
-      // Redirect or update UI as needed
       navigate('/possession'); // Redirect to the list of possessions
     } catch (error) {
       setError(error.message);
+      console.error('Erreur dans handleUpdate:', error); // Affiche l'erreur
     } finally {
       setLoading(false);
     }
   };
+
+
 
   return (
     <div>
@@ -100,7 +109,7 @@ const UpdatePossessionPage = () => {
       ) : (
         <p>Loading...</p>
       )}
-      
+
       {successMessage && <p>{successMessage}</p>}
       {error && <p>Error: {error}</p>}
     </div>

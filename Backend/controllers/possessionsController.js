@@ -47,7 +47,7 @@ export async function getPossessions(req, res) {
 // Mettre à jour une possession par libelle
 export async function updatePossession(req, res) {
     const { libelle } = req.params;
-    const { valeur } = req.body;
+    const { valeur, dateFin } = req.body;
 
     try {
         // Lire les données existantes
@@ -59,7 +59,7 @@ export async function updatePossession(req, res) {
         const updatedData = existingData.map(possession => {
             if (possession.libelle === libelle) {
                 updated = true;
-                return { ...possession, valeur }; // Mise à jour du champ dateFin
+                return { ...possession, valeur, dateFin }; // Mise à jour des champs
             }
             return possession;
         });
@@ -134,37 +134,44 @@ export async function deletePossession(req, res) {
     }
 }
 // controllers/patrimoineController.js
-import Flux from "../../models/possessions/Possession.js"
+import Flux from "../../models/possessions/Flux.js"
 export const getValeurPatrimoine = async (req, res) => {
     const { date } = req.params;
     const dateObjet = new Date(date);
 
     try {
+        // Lire le fichier des possessions
         const { status, data } = await readFile('./data/possessions.json');
         if (status === 'ERROR') {
+            console.error('Erreur de lecture du fichier');
             return res.status(500).json({ error: 'Erreur de lecture du fichier' });
         }
 
         let patrimoineTotal = 0;
+
+        // Calculer la valeur totale du patrimoine
         data.forEach(possession => {
             const instancePossession = new Flux(
                 possession.possesseur,
                 possession.libelle,
-                possession.valeur,
+                parseFloat(possession.valeur), // Conversion en nombre
                 new Date(possession.dateDebut),
                 possession.dateFin ? new Date(possession.dateFin) : null,
-                possession.tauxAmortissement,
+                parseFloat(possession.tauxAmortissement), // Conversion en nombre
                 possession.jour // Si applicable
             );
+
             patrimoineTotal += instancePossession.getValeur(dateObjet);
         });
 
-        res.status(200).json({ date: dateObjet, patrimoine: patrimoineTotal });
+        // Envoyer la réponse avec la valeur calculée
+        res.status(200).json({ date: dateObjet.toISOString(), patrimoine: patrimoineTotal });
     } catch (error) {
         console.error('Erreur lors du calcul du patrimoine:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 };
+
 // controllers/patrimoineController.js
 export const getValeurPatrimoineRange = async (req, res) => {
     const { dateDebut, dateFin, jour, type } = req.body;
