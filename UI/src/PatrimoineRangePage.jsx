@@ -1,80 +1,77 @@
 import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import { Line } from 'react-chartjs-2';
+import 'chart.js/auto'; // Import nécessaire pour Chart.js 3.x
 
 const PatrimoineRangePage = () => {
-  const [dateDebut, setDateDebut] = useState('');
-  const [dateFin, setDateFin] = useState('');
-  const [jour, setJour] = useState(''); // Assure-toi de mettre une valeur correcte selon les besoins
-  const [type, setType] = useState('month'); // 'month' ou autre valeur selon ton besoin
-  const [patrimoineData, setPatrimoineData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [jour, setJour] = useState(1);
+  const [chartData, setChartData] = useState(null);
 
-  const handleFetchData = async () => {
-    setLoading(true);
-    setError(null);
+  const fetchData = async () => {
+    const response = await fetch(`http://localhost:3001/api/patrimoine/range?startDate=${startDate.toString()}&endDate=${endDate.toString()}&jour=${1}`);
+    const data = await response.json();
+    const dates = data.map(entry => new Date(entry.date).toLocaleDateString());
+    const valeurs = data.map(entry => entry.valeur);
 
-    try {
-      const response = await fetch('http://localhost:3001/api/patrimoine/range', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    setChartData({
+      labels: dates,
+      datasets: [
+        {
+          label: 'Valeur du Patrimoine',
+          data: valeurs,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+          fill: false,
         },
-        body: JSON.stringify({
-          dateDebut,
-          dateFin,
-          jour,
-          type
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+      ],
+    });
+  };
 
-      const data = await response.json();
-      setPatrimoineData(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchData();
   };
 
   return (
     <div>
-      <h1>Patrimoine Range Page</h1>
-      <input
-        type="date"
-        value={dateDebut}
-        onChange={(e) => setDateDebut(e.target.value)}
-        placeholder="Date Début"
-      />
-      <input
-        type="date"
-        value={dateFin}
-        onChange={(e) => setDateFin(e.target.value)}
-        placeholder="Date Fin"
-      />
-      <input
-        type="number"
-        value={jour}
-        onChange={(e) => setJour(e.target.value)}
-        placeholder="Jour"
-      />
-      <select value={type} onChange={(e) => setType(e.target.value)}>
-        <option value="month">Month</option>
-        <option value="day">Day</option>
-        {/* Ajoutez d'autres options si nécessaire */}
-      </select>
-      <button onClick={handleFetchData}>Fetch Patrimoine Range Data</button>
-      
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      <ul>
-        {patrimoineData.map((item, index) => (
-          <li key={index}>Date: {item.date}, Valeur: {item.patrimoine}</li>
-        ))}
-      </ul>
+      <h2>Valeur du Patrimoine par Plage de Dates</h2>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="startDate">
+          <Form.Label>Date de début</Form.Label>
+          <Form.Control
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group controlId="endDate">
+          <Form.Label>Date de fin</Form.Label>
+          <Form.Control
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group controlId="jour">
+          <Form.Label>Jour</Form.Label>
+          <Form.Control
+            type="number"
+            value={jour}
+            onChange={(e) => setJour(e.target.value)}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" className="mt-3">
+          Obtenir Valeur
+        </Button>
+      </Form>
+
+      {chartData && (
+        <div className="mt-4">
+          <Line data={chartData} />
+        </div>
+      )}
     </div>
   );
 };

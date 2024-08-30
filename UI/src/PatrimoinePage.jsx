@@ -2,31 +2,24 @@ import React, { useState } from 'react';
 
 const PatrimoinePage = () => {
   const [date, setDate] = useState('');
-  const [patrimoineValue, setPatrimoineValue] = useState(null);
+  const [patrimoine, setPatrimoine] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleFetchData = async () => {
-    if (!date) {
-      setError('Veuillez sélectionner une date.');
-      return;
-    }
-
+  const handleCalculate = async () => {
     setLoading(true);
     setError(null);
-    setPatrimoineValue(null);  // Clear previous data before new fetch
 
     try {
-      const response = await fetch(`http://localhost:3001/api/patrimoine/${date}`);
-      
+      const response = await fetch(`http://localhost:3001/api/patrimoine?date=${date}`);
       if (!response.ok) {
-        throw new Error('La réponse du réseau n\'était pas correcte');
+        throw new Error('Network response was not ok');
       }
 
       const data = await response.json();
-      setPatrimoineValue(data.patrimoine);  // Assumes the API returns { patrimoine: value }
+      setPatrimoine(data.valeur);
     } catch (error) {
-      setError(`Erreur lors de la récupération des données: ${error.message}`);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -34,19 +27,23 @@ const PatrimoinePage = () => {
 
   return (
     <div>
-      <h1>Patrimoine Page</h1>
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-      />
-      <button onClick={handleFetchData}>Fetch Patrimoine Data</button>
+      <h1>Calculate Patrimoine</h1>
+      <div className="form-group">
+        <label htmlFor="date">Date</label>
+        <input
+          type="date"
+          id="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
+      </div>
+      <button onClick={handleCalculate} disabled={loading}>
+        {loading ? 'Calculating...' : 'Calculate'}
+      </button>
       
-      {loading && <p>Chargement...</p>}
-      {error && <p style={{ color: 'red' }}>Erreur: {error}</p>}
-      {patrimoineValue !== null && (
-        <p>Valeur du patrimoine au {date}: {patrimoineValue}</p>
-      )}
+      {patrimoine !== null && <p>Valeur du patrimoine au {date}: {patrimoine}</p>}
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };

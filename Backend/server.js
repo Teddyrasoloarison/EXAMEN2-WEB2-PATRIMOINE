@@ -101,6 +101,56 @@ app.patch('/possession/:libelle/close', (req, res) => {
     res.send(`Patch received for ${libelle}`);
 });
 
+import calculatePatrimoine from './calculatePatrimoine.js';
+
+app.get('/api/patrimoine', async (req, res) => {
+    const { date } = req.query;
+
+    if (!date) {
+        return res.status(400).json({ error: 'La date est requise' });
+    }
+
+    try {
+        const patrimoineValue = await calculatePatrimoine(date);
+        res.json({ date, valeur: patrimoineValue });
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur lors du calcul du patrimoine' });
+    }
+});
+
+import Flux from '../models/possessions/Flux.js'
+
+app.get('/api/patrimoine/range', async (req, res) => {
+    const { startDate, endDate, jour } = req.query;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    let valeursPatrimoine = [];
+
+    for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
+        const totalValeur = possessions.reduce((total, possession) => {
+            const flux = new Flux(
+                possession.possesseur,
+                possession.libelle,
+                possession.valeur,
+                new Date(possession.dateDebut),
+                possession.dateFin ? new Date(possession.dateFin) : null,
+                possession.tauxAmortissement,
+                jour
+            );
+            return total + flux.getValeur(new Date(d));
+        }, 0);
+        valeursPatrimoine.push({
+            date: new Date(d),
+            valeur: totalValeur
+        });
+    }
+
+    res.json(valeursPatrimoine);
+});
+
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -165,7 +165,7 @@ export const getValeurPatrimoine = async (req, res) => {
         });
 
         // Envoyer la réponse avec la valeur calculée
-        res.status(200).json({ date: dateObjet.toISOString(), patrimoine: patrimoineTotal });
+        res.status(200).json({ date: dateObjet.toString(), patrimoine: patrimoineTotal });
     } catch (error) {
         console.error('Erreur lors du calcul du patrimoine:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });

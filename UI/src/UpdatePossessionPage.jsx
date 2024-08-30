@@ -32,7 +32,7 @@ const UpdatePossessionPage = () => {
     fetchPossession();
   }, [libelle]);
 
-  const handleUpdate = async () => {
+  /*const handleUpdate = async () => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
@@ -69,8 +69,42 @@ const UpdatePossessionPage = () => {
     } finally {
       setLoading(false);
     }
+  };*/
+  const handleUpdate = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccessMessage(null);
+  
+    try {
+      const formattedDateFin = new Date(dateFin).toISOString(); // Formatage de la date
+  
+      const response = await fetch(`http://localhost:3001/api/possession/${libelle}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          valeur,
+          dateFin: formattedDateFin, // Assurez-vous d'envoyer la date correctement formatée
+        }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Network response was not ok: ${errorData.message || 'Unknown error'}`);
+      }
+  
+      const data = await response.json();
+      setSuccessMessage('Possession mise à jour avec succès!');
+      navigate('/possession'); // Redirect to the list of possessions
+    } catch (error) {
+      setError(error.message);
+      console.error('Erreur dans handleUpdate:', error);
+    } finally {
+      setLoading(false);
+    }
   };
-
+  
 
 
   return (
