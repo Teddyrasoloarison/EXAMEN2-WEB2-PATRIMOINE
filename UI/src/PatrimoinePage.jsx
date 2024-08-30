@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './PatrimoinePage.css'
 const PatrimoinePage = () => {
   const [date, setDate] = useState('');
   const [patrimoine, setPatrimoine] = useState(null);
@@ -26,10 +26,10 @@ const PatrimoinePage = () => {
   };
 
   return (
-    <div>
-      <h1>Calculate Patrimoine</h1>
+    <div className='patrimoineContainer'>
+      <h1>Calcul Patrimoine</h1>
       <div className="form-group">
-        <label htmlFor="date">Date</label>
+        <label htmlFor="date">Sélectioner une date</label>
         <input
           type="date"
           id="date"
@@ -39,7 +39,7 @@ const PatrimoinePage = () => {
         />
       </div>
       <button onClick={handleCalculate} disabled={loading}>
-        {loading ? 'Calculating...' : 'Calculate'}
+        {loading ? 'Calculating...' : 'Calculer'}
       </button>
       
       {patrimoine !== null && <p>Valeur du patrimoine au {date}: {patrimoine}</p>}

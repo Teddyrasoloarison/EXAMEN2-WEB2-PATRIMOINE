@@ -73,7 +73,7 @@ export async function updatePossession(req, res) {
         if (writeStatus === 'ERROR') throw new Error('Erreur d\'écriture du fichier');
 
         res.status(200).json({ message: 'Possession mise à jour avec succès' });
-    } catch (error) {
+    } catch (error) {   
         console.error('Erreur dans updatePossession:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
@@ -171,6 +171,7 @@ export const getValeurPatrimoine = async (req, res) => {
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 };
+import Possession from '../../models/possessions/Possession.js';
 
 // controllers/patrimoineController.js
 export const getValeurPatrimoineRange = async (req, res) => {
@@ -190,7 +191,7 @@ export const getValeurPatrimoineRange = async (req, res) => {
         while (currentDate <= fin) {
             let patrimoineTotal = 0;
             data.forEach(possession => {
-                const instancePossession = new Flux(
+                const instancePossession = new Possession(
                     possession.possesseur,
                     possession.libelle,
                     possession.valeur,
