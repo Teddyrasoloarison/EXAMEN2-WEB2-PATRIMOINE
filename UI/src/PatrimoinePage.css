@@ -1,0 +1,58 @@
+/* PatrimoinePage.css */
+.patrimoineContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /*min-height: 80vh; /* Ajustez en fonction de la hauteur que vous souhaitez */
+    padding: 20px;
+    background-color: #f8f9fa; /* Couleur de fond légère pour la page */
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 15vh;
+  }
+  
+  label {
+    display: block;
+    margin: auto;
+    font-weight: bold;
+
+  }
+  
+  input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  
+ .patrimoineContainer button {
+    background-color: #007bff; /* Couleur de fond bleue */
+    color: #fff; /* Couleur du texte en blanc */
+    border: 1px solid #007bff; /* Bordure bleue */
+    padding: 10px 20px; /* Espacement intérieur du bouton */
+    border-radius: 4px; /* Coins arrondis */
+    cursor: pointer; /* Changer le curseur au survol */
+    transition: background-color 0.3s, border-color 0.3s; /* Transition douce pour les changements de couleur */
+  }
+  
+  .calculate-button:hover {
+    background-color: #0056b3; /* Couleur de fond plus sombre au survol */
+    border-color: #0056b3; /* Bordure plus sombre au survol */
+  }
+  
+  .calculate-button:disabled {
+    background-color: #6c757d; /* Couleur de fond pour le bouton désactivé */
+    border-color: #6c757d; /* Bordure pour le bouton désactivé */
+    cursor: not-allowed; /* Changer le curseur pour indiquer que le bouton est désactivé */
+  }
+  
+  .error-message {
+    color: #dc3545; /* Couleur rouge pour le message d'erreur */
+    font-weight: bold;
+  }
+  

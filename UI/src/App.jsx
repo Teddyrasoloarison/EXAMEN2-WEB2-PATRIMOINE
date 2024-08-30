@@ -6,10 +6,11 @@ import PossessionList from './PossessionList';
 import CreatePossession from './CreatePossessionPage';
 import UpdatePossession from './UpdatePossessionPage';
 import PatrimoineRangePage from './PatrimoineRangePage';
+import './App.css';
 
 function App() {
-  return (
-    <Router>
+  return <div className='pageContainer'>
+           <Router>
       <Header />
       <div className="container mt-4">
         <Routes>
@@ -20,8 +21,8 @@ function App() {
           <Route path="/patrimoine/range" element={<PatrimoineRangePage />} />
         </Routes>
       </div>
-    </Router>
-  );
+    </Router> 
+  </div>
 }
 
 export default App;

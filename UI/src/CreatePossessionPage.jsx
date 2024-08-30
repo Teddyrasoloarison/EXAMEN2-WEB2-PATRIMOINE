@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './CreatePossessionPage.css'
 const CreatePossessionPage = () => {
   const [libelle, setLibelle] = useState('');
   const [valeur, setValeur] = useState('');
@@ -47,8 +47,8 @@ const CreatePossessionPage = () => {
   };
 
   return (
-    <div>
-      <h1>Create Possession</h1>
+    <div className='create-possession-container'>
+      <h2>Create Possession</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();

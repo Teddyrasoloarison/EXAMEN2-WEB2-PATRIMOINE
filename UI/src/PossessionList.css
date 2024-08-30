@@ -1,0 +1,27 @@
+/* PossessionList.css */
+.possession-list-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2vh;
+    height: 50vh;
+  }
+  
+  .createButton {
+    width: 20vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .actions-column {
+    white-space: nowrap;
+  }
+  
+  .action-button {
+    margin-right: 8px;
+  }
+  
+  .action-button:last-child {
+    margin-right: 0;
+  }
+  

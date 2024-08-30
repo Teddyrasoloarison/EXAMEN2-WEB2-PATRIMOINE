@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import './PossessionList.css';
 
 const PossessionList = () => {
   const [possessions, setPossessions] = useState([]);
@@ -57,9 +58,9 @@ const PossessionList = () => {
   };
 
   return (
-    <div>
+    <div className='possession-list-container'>
       <h1>Liste des Possessions</h1>
-      <Button as={Link} to="/possession/create" variant="primary">Créer Possession</Button>
+      {/*<Button as={Link} to="/possession/create" variant="primary" className='createButton'>Créer Possession</Button>*/}
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
