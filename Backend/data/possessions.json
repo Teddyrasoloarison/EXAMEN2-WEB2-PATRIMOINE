@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
     {
         "libelle": "MacBook Pro",
@@ -46,4 +47,8 @@
         "tauxAmortissement": 15
     }
 ]
+=======
+
+[{"libelle":"Vêtements","valeur":"40000","dateDebut":"2024-08-30","tauxAmortissement":"5"},{"libelle":"Téléphone","valeur":"500000","dateDebut":"2024-08-31","tauxAmortissement":"10"}]
+>>>>>>> 2dbed9fd041f6cc633f2ab40faac1d7ecfdc1f3d
 
