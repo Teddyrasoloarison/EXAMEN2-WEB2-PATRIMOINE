@@ -8,9 +8,10 @@ const PatrimoineRangePage = () => {
   const [endDate, setEndDate] = useState('');
   const [jour, setJour] = useState(1);
   const [chartData, setChartData] = useState(null);
+  const urlBackend = 'https://examen2-web2-patrimoine.onrender.com';
 
   const fetchData = async () => {
-    const response = await fetch(`http://localhost:3001/api/patrimoine/range?startDate=${startDate.toString()}&endDate=${endDate.toString()}&jour=${1}`);
+    const response = await fetch(`${urlBackend}/api/patrimoine/range?startDate=${startDate.toString()}&endDate=${endDate.toString()}&jour=${1}`);
     const data = await response.json();
     const dates = data.map(entry => new Date(entry.date).toLocaleDateString());
     const valeurs = data.map(entry => entry.valeur);

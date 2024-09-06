@@ -10,12 +10,13 @@ const UpdatePossessionPage = () => {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
+  const urlBackend = 'https://examen2-web2-patrimoine.onrender.com';
 
   useEffect(() => {
     const fetchPossession = async () => {
       try {
         console.log('Fetching possession for libelle:', libelle);
-        const response = await fetch(`http://localhost:3001/api/possession/${libelle}`);
+        const response = await fetch(`${urlBackend}/api/possession/${libelle}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -78,7 +79,7 @@ const UpdatePossessionPage = () => {
     try {
       const formattedDateFin = new Date(dateFin).toISOString(); // Formatage de la date
   
-      const response = await fetch(`http://localhost:3001/api/possession/${libelle}`, {
+      const response = await fetch(`${urlBackend}/api/possession/${libelle}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -108,6 +109,7 @@ const UpdatePossessionPage = () => {
 
 
   return (
+  
   <div>
     <h1>Update Possession</h1>
     {currentPossession ? (

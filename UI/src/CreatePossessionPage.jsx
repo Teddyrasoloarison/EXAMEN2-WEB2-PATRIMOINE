@@ -8,6 +8,7 @@ const CreatePossessionPage = () => {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
+  const urlBackend = 'https://examen2-web2-patrimoine.onrender.com';
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -15,7 +16,7 @@ const CreatePossessionPage = () => {
     setSuccessMessage(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/possession', {
+      const response = await fetch(`${urlBackend}/api/possession`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

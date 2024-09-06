@@ -5,13 +5,14 @@ const PatrimoinePage = () => {
   const [patrimoine, setPatrimoine] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const urlBackend = 'https://examen2-web2-patrimoine.onrender.com';
 
   const handleCalculate = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/api/patrimoine?date=${date}`);
+      const response = await fetch(`${urlBackend}/api/patrimoine?date=${date}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

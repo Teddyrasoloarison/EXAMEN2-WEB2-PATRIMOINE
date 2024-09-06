@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dyxrandrian/Student-patrimoine.git"
+    "url": "https://github.com/Teddyrasoloarison/EXAMEN2-WEB2-PATRIMOINE.git"
   },
   "author": "dyx",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Dyxrandrian/Student-patrimoine/issues"
+    "url": "https://github.com/Teddyrasoloarison/EXAMEN2-WEB2-PATRIMOINE.git"
   },
-  "homepage": "https://github.com/Dyxrandrian/Student-patrimoine#readme",
+  "homepage": "https://github.com/Teddyrasoloarison/EXAMEN2-WEB2-PATRIMOINE.git",
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
