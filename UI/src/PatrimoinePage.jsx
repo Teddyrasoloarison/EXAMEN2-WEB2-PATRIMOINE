@@ -43,7 +43,7 @@ const PatrimoinePage = () => {
         {loading ? 'Calculating...' : 'Calculer'}
       </button>
       
-      {patrimoine !== null && <p>Valeur du patrimoine au {date}: {patrimoine}</p>}
+      {patrimoine !== null && <p>Valeur du patrimoine au {date}: {patrimoine.toFixed(2)}</p>}
       {error && <p>Error: {error}</p>}
     </div>
   );
