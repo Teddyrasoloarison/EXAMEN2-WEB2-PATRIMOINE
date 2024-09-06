@@ -47,7 +47,7 @@ export async function getPossessions(req, res) {
 // Mettre à jour une possession par libelle
 export async function updatePossession(req, res) {
     const { libelle } = req.params; // Libellé actuel pour identifier la possession
-    const { nouveauLibelle, dateFin } = req.body; // Nouveau libellé et date de fin
+    const { nouveauLibelle } = req.body; // Nouveau libellé 
 
     try {
         // Lire les données existantes
@@ -62,7 +62,6 @@ export async function updatePossession(req, res) {
                 return {
                     ...possession,
                     libelle: nouveauLibelle || possession.libelle, // Mise à jour du libellé si fourni
-                    dateFin: dateFin || possession.dateFin // Mise à jour de la date de fin si fournie
                 };
             }
             return possession;
