@@ -108,46 +108,56 @@ const UpdatePossessionPage = () => {
 
 
   return (
-    <div>
-      <h1>Update Possession</h1>
-      {currentPossession ? (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleUpdate();
-          }}
-        >
-          <div className="form-group">
-            <label htmlFor="valeur">Valeur</label>
-            <input
-              type="number"
-              id="valeur"
-              value={valeur}
-              onChange={(e) => setValeur(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="dateFin">Date Fin</label>
-            <input
-              type="date"
-              id="dateFin"
-              value={dateFin}
-              onChange={(e) => setDateFin(e.target.value)}
-            />
-          </div>
-          <button type="submit" disabled={loading}>
-            {loading ? 'Updating...' : 'Update'}
-          </button>
-        </form>
-      ) : (
-        <p>Loading...</p>
-      )}
+  <div>
+    <h1>Update Possession</h1>
+    {currentPossession ? (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleUpdate();
+        }}
+      >
+        <div className="form-group">
+          <label htmlFor="libelle">Libellé</label>
+          <input
+            type="text"
+            id="libelle"
+            value={libelle}
+            onChange={(e) => setLibelle(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="valeur">Valeur</label>
+          <input
+            type="number"
+            id="valeur"
+            value={valeur}
+            disabled
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="dateFin">Date Fin</label>
+          <input
+            type="date"
+            id="dateFin"
+            value={dateFin}
+            onChange={(e) => setDateFin(e.target.value)}
+          />
+        </div>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Updating...' : 'Update'}
+        </button>
+      </form>
+    ) : (
+      <p>Loading...</p>
+    )}
 
-      {successMessage && <p>{successMessage}</p>}
-      {error && <p>Error: {error}</p>}
-    </div>
-  );
+    {successMessage && <p>{successMessage}</p>}
+    {error && <p>Error: {error}</p>}
+  </div>
+);
+
 };
 
 export default UpdatePossessionPage;

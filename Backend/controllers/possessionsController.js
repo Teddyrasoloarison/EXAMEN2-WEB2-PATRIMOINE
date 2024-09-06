@@ -46,8 +46,8 @@ export async function getPossessions(req, res) {
 
 // Mettre à jour une possession par libelle
 export async function updatePossession(req, res) {
-    const { libelle } = req.params;
-    const { valeur, dateFin } = req.body;
+    const { libelle } = req.params; // Libellé actuel pour identifier la possession
+    const { nouveauLibelle, dateFin } = req.body; // Nouveau libellé et date de fin
 
     try {
         // Lire les données existantes
@@ -59,7 +59,11 @@ export async function updatePossession(req, res) {
         const updatedData = existingData.map(possession => {
             if (possession.libelle === libelle) {
                 updated = true;
-                return { ...possession, valeur, dateFin }; // Mise à jour des champs
+                return {
+                    ...possession,
+                    libelle: nouveauLibelle || possession.libelle, // Mise à jour du libellé si fourni
+                    dateFin: dateFin || possession.dateFin // Mise à jour de la date de fin si fournie
+                };
             }
             return possession;
         });
@@ -78,6 +82,7 @@ export async function updatePossession(req, res) {
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 }
+
 
 // Clore une possession par libelle
 export async function closePossession(req, res) {
